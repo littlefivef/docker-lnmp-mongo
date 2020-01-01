@@ -1,0 +1,71 @@
+version: '3'
+services:
+  nginx: 
+    build: ./nginx
+    depends_on: 
+      - php
+    ports: 
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./www:/usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    networks: 
+      - frontend
+    restart: always
+    container_name: nginx
+  php: 
+    build: ./php
+    volumes: 
+      - ./www:/var/www/html
+    links:
+      - redis
+      - mysql
+      - mongo
+    networks: 
+      - frontend
+      - backend  
+    restart: always
+    container_name: php
+  redis: 
+    build: ./redis
+    ports:
+      - "6379:6379"
+    volumes: 
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks: 
+      - backend  
+    restart: always
+    container_name: redis
+  mysql:
+    build: ./mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_DB_PASSWORD}
+    restart: always
+    container_name: mysql
+    networks: 
+      - backend
+  mongo:
+    build: ./mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db #Windows和OS X 只能只用卷标的形式挂载，其他系统可指定挂载点
+    environment:
+      TZ: ${TZ}
+      #MONGO_INITDB_ROOT_USERNAME: root
+      #MONGO_INITDB_ROOT_PASSWORD: example
+    restart: always
+    container_name: mongo
+    networks:
+      - backend
+networks:
+  frontend:
+  backend:
+volumes:
+  mongo-data:
