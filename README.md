@@ -10,24 +10,28 @@
 - 查看docker详细信息：docker info
 
 ### docker镜像加速（选择阿里云镜像加速）
+```
 vim /etc/docker/daemon.json
 { "registry-mirrors": ["你的阿里云镜像加速地址"] }
 systemctl daemon-reload
 systemctl restart docker
+```
 
 ### 安装docker-compose
 - 方式一、官网对各个平台的docker-compose安装都有详细说明：https://docs.docker.com/compose/install/
 - 方式二、除了官网的安装方式外，在centos我们还可以这么手动安装：
+```
 	yum install -y epel-release
 	yum install -y python-pip
 	pip install -i https://pypi.tuna.tsinghua.edu.cn/simple docker-compose==1.24.1   #（1.24.1版本比较稳定）
+```
 - 安装成功之后可以通过该命令查看安装的版本：docker-compose version
 
 #### 简单的docker-commpose 命令
 - 启动：docker-compose up -d
 - 关闭：docker-compose down
 
-####使用
+### 使用
 - 进入 docker-lnmp-mongo 目录下
 - 复制 env-example 并重命名为 .env
 - 运行 docker-compose up -d (第一次运行因为需要构建镜像，所以需要比较长的时间)
