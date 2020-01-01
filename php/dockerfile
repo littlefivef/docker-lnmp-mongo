@@ -3,18 +3,21 @@ FROM php:7.3-fpm-alpine
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 ENV PHPREDIS_VERSION 5.0.2
+ENV PHPMONGODB_VERSION 1.6.1
 
-
-RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
+RUN apk update &&  apk upgrade && apk add cmake libstdc++ libpng-dev libzip-dev freetype-dev libjpeg-turbo-dev libpng-dev \
+    && curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
     && tar xfz /tmp/redis.tar.gz \
     && rm -r /tmp/redis.tar.gz \
     && mkdir -p /usr/src/php/ext \
     && mv phpredis-$PHPREDIS_VERSION /usr/src/php/ext/redis \
     && docker-php-ext-install redis \
+    && curl -L -o /tmp/mongodb.tgz  https://github.com/mongodb/mongo-php-driver/releases/download/$PHPMONGODB_VERSION/mongodb-$PHPMONGODB_VERSION.tgz \
+    && tar xfz /tmp/mongodb.tgz \
+    && rm -r /tmp/mongodb.tgz \
+    && mkdir -p /usr/src/php/ext \
+    && mv mongodb-$PHPMONGODB_VERSION /usr/src/php/ext/mongodb \
+    && docker-php-ext-install mongodb \
     && rm -rf /usr/src/php \  
-    && apk update &&  apk upgrade && apk add cmake libstdc++ libpng-dev libzip-dev \
-	freetype-dev \
-	libjpeg-turbo-dev \
-	libpng-dev \
     && docker-php-ext-install pdo_mysql mysqli pcntl gd zip  \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer 
