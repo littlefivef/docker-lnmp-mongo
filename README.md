@@ -1,1 +1,1 @@
-# docker-lnmp-mongo
+# lnmp
