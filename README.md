@@ -1,7 +1,7 @@
-#使用Docker 部署 LNMP+Redis+mongodb 环境 
+### 使用Docker 部署 LNMP+Redis+mongodb 环境 
 
-### php版本选择了7.3，对应的mongdb扩展和测试方式都是用的php7的版本，不适于7以下的版本
-### 在php原来的镜像的基础上，主要增加的扩展有：redis、mongodb、pdo_mysql、mysqli、gd、zip
+###php版本选择了7.3，对应的mongdb扩展和测试方式都是用的php7的版本，不适于7以下的版本
+###在php原来的镜像的基础上，主要增加的扩展有：redis、mongodb、pdo_mysql、mysqli、gd、zip
 
 ### Linux安装Docker
 - 镜像：选择阿里云的docker-ce镜像安装
